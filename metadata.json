@@ -1,0 +1,5 @@
+{
+  "name": "TurnoLibre",
+  "description": "A multi-tenant SaaS platform for barbershops and beauty salons with online booking and management tools.",
+  "requestFramePermissions": []
+}
