@@ -9,14 +9,21 @@ import { PublicLayout } from '../components/ui/Layouts';
 export const Landing: React.FC = () => {
   const [shops, setShops] = useState<Shop[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProvince, setSelectedProvince] = useState('');
 
   useEffect(() => {
     const load = async () => {
+      try {
         const data = await api.getAllShops();
-        setShops(data);
+        setShops(data || []);
+      } catch (e: any) {
+        setError("Error al cargar la información. Por favor, revisa la conexión con la base de datos y la configuración de RLS en Supabase.");
+        console.error(e);
+      } finally {
         setLoading(false);
+      }
     };
     load();
   }, []);
@@ -52,6 +59,11 @@ export const Landing: React.FC = () => {
       <section className="max-w-7xl mx-auto px-4 py-16">
         {loading ? (
             <div className="flex justify-center py-20"><Loader2 className="animate-spin text-blue-600" size={40} /></div>
+        ) : error ? (
+            <div className="col-span-full text-center py-20 text-red-500 bg-red-50 border border-red-200 rounded-lg p-8">
+                <h3 className="font-bold text-lg mb-2">¡Ups! Algo salió mal</h3>
+                <p>{error}</p>
+            </div>
         ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredShops.map(shop => {

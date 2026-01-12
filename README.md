@@ -60,3 +60,21 @@ Cuando despliegues esta aplicación en Vercel, necesitarás configurar las misma
     *   `GEMINI_API_KEY`
 
 Con esto, tu aplicación desplegada podrá conectarse a Supabase y a la API de Gemini correctamente.
+
+## Solución de Problemas: Página en Blanco y Datos Vacíos
+
+Si después de configurar tus variables de entorno la aplicación sigue mostrando una página en blanco o no carga ninguna tienda, es muy probable que el problema esté relacionado con la **Seguridad a Nivel de Fila (Row-Level Security - RLS)** de Supabase.
+
+Por defecto, RLS está activado para proteger tus datos. Esto significa que necesitas crear una **política** para permitir que la aplicación lea la información de las tablas.
+
+### Cómo Habilitar el Acceso de Lectura para la Tabla `shops`
+
+La página de inicio necesita leer la lista de tiendas (`shops`) públicamente. Sigue estos pasos para crear la política necesaria:
+
+1.  **Ve a tu proyecto en Supabase.**
+2.  En el menú de la izquierda, haz clic en **Authentication** y luego en **Policies**.
+3.  Busca la tabla `shops` en la lista y haz clic en **New Policy**.
+4.  Se te ofrecerán plantillas. Selecciona la opción **"Enable read access to everyone"**.
+5.  Supabase rellenará el formulario por ti. Revisa que todo esté correcto y haz clic en **"Review"** y luego en **"Save policy"**.
+
+Con esta política, tu aplicación tendrá permiso para leer los datos de la tabla `shops` y mostrarlos en la página de inicio.
